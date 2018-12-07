@@ -12,7 +12,7 @@ body {
 
 canvas {
     position: absolute;
-    left: calc(50% - 480px);
-    top: calc(50% - 270px);
+    left: 150px;
+    top: 150px;
     background: WhiteSmoke;
 }

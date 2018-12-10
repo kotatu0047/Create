@@ -1,23 +1,37 @@
-import {Shape, Stage, Graphics, Text, Container, Ticker} from "@createjs/easeljs";
-//import  {Tween} from "@createjs/tweenjs";
+import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 
 
 const init = () => {
     const stage = new Stage('myCanvas');
     stage.enableMouseOver();
-    const container = new Container();
-    container.x = 300;
-    container.y = 300;
-    stage.addChild(container);
 
-    for (let i = 0; i < 10; i++) {
-        //円
-        const circle = new Shape();
-        circle.graphics.beginFill(Graphics.getHSL(50, 100, 50)).drawCircle(0, 0, 50);
-        circle.x = 200 * Math.sin(i * 360 / 10 * Math.PI / 180);
-        circle.y = 200 * Math.cos(i * 360 / 10 * Math.PI / 180);
-        container.addChild(circle);
-    }
+    //円が回転するやつ
+    // const container = new Container();
+    // container.x = 300;
+    // container.y = 300;
+    // stage.addChild(container);
+
+    // for (let i = 0; i < 10; i++) {
+    //     //円
+    //     const circle = new Shape();
+    //     circle.graphics.beginFill(Graphics.getHSL(50, 100, 50)).drawCircle(0, 0, 50);
+    //     circle.x = 200 * Math.sin(i * 360 / 10 * Math.PI / 180);
+    //     circle.y = 200 * Math.cos(i * 360 / 10 * Math.PI / 180);
+    //     container.addChild(circle);
+    // }
+    // const handleTick = () => {
+    //     container.rotation += 0.5;
+    //     const mx = stage.mouseX;
+    //     const my = stage.mouseY;
+    //     container.x = mx;
+    //     container.y = my;
+    //     // container.x += 2;
+    //     stage.update()
+    // };
+    // Ticker.framerate = Ticker.RAF;
+    // Ticker.addEventListener('tick', handleTick);
+
+
 
     //四角
     // const Rect = new Shape();
@@ -111,19 +125,61 @@ const init = () => {
     };
     button.addEventListener('mouseout', handleMouseout);
 
-    const handleTick = () => {
-        container.rotation += 0.5;
-        const mx = stage.mouseX;
-        const my = stage.mouseY;
-        container.x = mx;
-        container.y = my;
-        // container.x += 2;
-        stage.update()
+    //マウスを向く矢印と線と距離
+    const arrow = new Shape();
+    arrow.graphics
+        .beginFill('DarkRed')
+        .drawRect(-6,-3,12,6)
+        .beginFill('DarkRed')
+        .moveTo(4,10)
+        .lineTo(14,0)
+        .lineTo(4,-10)
+        .closePath();
+
+    // 画面中央に配置
+    arrow.x = stage.canvas.width / 2;
+    arrow.y = stage.canvas.height / 2;
+    stage.addChild(arrow);
+
+    const  line = new Shape();
+    stage.addChild(line);
+    const label = new Text('0px', '24px sans-serif','gray');
+    stage.addChild(label);
+
+    const handleTickForArrow = () => {
+        const dx = stage.mouseX - arrow.x;
+        const dy = stage.mouseY - arrow.y;
+        const  radians = Math.atan2(dy, dx);
+        arrow.rotation = radians * (180 / Math.PI);
+
+        const distance = Math.sqrt((dx **2) + (dy**2));
+        label.text = distance + 'px';
+        line.graphics.clear()
+            .setStrokeStyle(1).beginStroke('gray')
+            .moveTo(arrow.x,arrow.y)
+            .lineTo(stage.mouseX,stage.mouseY);
+
+        stage.update();
     };
-    Ticker.framerate = Ticker.RAF;
-    Ticker.addEventListener('tick', handleTick);
+
+    Ticker.addEventListener('tick', handleTickForArrow);
 
     stage.update();
+
+    //アニメーション
+    // const circle = new Shape();
+    // circle.graphics.beginFill("DarkRed").drawCircle(0, 0, 50);
+    // circle.y = 200;
+    // stage.addChild(circle);
+    // Tween.get(circle, {loop: true}) // ターゲットを指定
+    //     .to({x: 940, alpha: 0.1, y:500}, 2000)
+    //     .to({x: 500, y: 0, alpha: 1.0}, 3000)
+    //     .to({x: 500, y: 300}, 3000)
+    //     .to({scaleX: 3, scaleY: 3}, 5000);
+    // const handleTick = () => {
+    //     stage.update();
+    // };
+    // Ticker.addEventListener('tick', handleTick)
 };
 
 

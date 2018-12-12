@@ -1,8 +1,100 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
+import "@babel/polyfill";
+
+const displayWidth = 1200;
+const displayHeight = 500;
+const filedWidth = 800;
+const filedHeight = 300;
+
+const filedCoordinate = {
+    leftBottom: {x: 200, y: 400},  //[200,400],
+    leftTop: {x: 250, y: 100},
+    rightTop: {x: 950, y: 100},
+    rightBottom: {x: 1000, y: 400}
+};
+
+
+const initDisplay = () => {
+    const stage = new Stage('gameDisplay');
+    stage.enableMouseOver();
+
+    //デュエルフィールド
+    const filed = new Container();
+    stage.addChild(filed);
+
+    const filedOuterFrame = new Shape();
+    filedOuterFrame.graphics
+        .beginStroke('gray')
+        .setStrokeStyle(1)
+        .moveTo(filedCoordinate.leftBottom.x, filedCoordinate.leftBottom.y)
+        .lineTo(filedCoordinate.leftTop.x, filedCoordinate.leftTop.y)
+        .lineTo(filedCoordinate.rightTop.x, filedCoordinate.rightTop.y)
+        .lineTo(filedCoordinate.rightBottom.x, filedCoordinate.rightBottom.y)
+        .lineTo(filedCoordinate.leftBottom.x, filedCoordinate.leftBottom.y)
+        .closePath();
+    filed.addChild(filedOuterFrame);
+
+
+    stage.update();
+
+    /**
+     * 下の方が太くて左右対称な台形を作成する関数
+     * @param {Number} bottomWidth 底辺の長さ
+     * @param {Number} topWidth　上辺の長さ
+     * @param {Number} height　高さ
+     * @param {Number} leftBottomX　左下のX座標
+     * @param {Number} leftBottomY　左下のY座標
+     * @return {Shape} filedOuterFrame 台形の参照
+     */
+    function CreateTrapezoid(bottomWidth, topWidth, height, leftBottomX, leftBottomY) {
+        const variable = (bottomWidth - topWidth) / 2;
+
+        const filedOuterFrame = new Shape();
+        filedOuterFrame.graphics
+            .beginStroke('gray')
+            .setStrokeStyle(1)
+            .moveTo(leftBottomX, leftBottomY)
+            .lineTo(leftBottomX + variable, leftBottomY - height)
+            .lineTo(leftBottomX + variable + topWidth, leftBottomY - height)
+            .lineTo(leftBottomX + bottomWidth, leftBottomY)
+            .lineTo(leftBottomX, leftBottomY)
+            .closePath();
+
+        return filedOuterFrame;
+    }
+
+    /**
+     * デュエルフィールドの内側の枠を作成
+     * @param {Number} verticalNo 縦の番号　上から
+     * @param {Number} horizontalNo　横の番号　右から
+     * @returns {{x: number}}
+     */
+    function CreateFrame(verticalNo, horizontalNo) {
+        const filedWidthInside = filedWidth - 20;
+        const filedHeightInside = filedHeight - 20;
+        const aBlockWidth = filedWidthInside / 4;
+        const aBlockHeight = filedHeightInside / 4;
+
+        const Coordinate = {
+            leftBottom: {x: 200, y: 400},
+            leftTop: {x: 250, y: 100},
+            rightTop: {x: 950, y: 100},
+            rightBottom: {x: 1000, y: 400}
+        };
+
+        if (verticalNo === 1) {
+
+        }
+
+
+        return {x: 4};
+    }
+
+};
 
 
 const init = () => {
-    const stage = new Stage('myCanvas');
+    const stage = new Stage('gameDisplay');
     stage.enableMouseOver();
 
     //円が回転するやつ
@@ -30,7 +122,6 @@ const init = () => {
     // };
     // Ticker.framerate = Ticker.RAF;
     // Ticker.addEventListener('tick', handleTick);
-
 
 
     //四角
@@ -73,12 +164,12 @@ const init = () => {
     buttonBackGroundOnMouseOver.graphics
         .beginFill(keyColor)
         .drawRoundRect(0, 0, btnWidth, btnHeight, 4);
-        buttonBackGroundOnMouseOver.visible = false;
+    buttonBackGroundOnMouseOver.visible = false;
     button.addChild(buttonBackGroundOnMouseOver);
 
 
     //文字
-    const buttonText = new Text('Button', '24px sans-serif',keyColor);
+    const buttonText = new Text('Button', '24px sans-serif', keyColor);
     buttonText.x = btnWidth / 2;
     buttonText.y = btnHeight / 2;
     buttonText.textAlign = 'center';
@@ -129,11 +220,11 @@ const init = () => {
     const arrow = new Shape();
     arrow.graphics
         .beginFill('DarkRed')
-        .drawRect(-6,-3,12,6)
+        .drawRect(-6, -3, 12, 6)
         .beginFill('DarkRed')
-        .moveTo(4,10)
-        .lineTo(14,0)
-        .lineTo(4,-10)
+        .moveTo(4, 10)
+        .lineTo(14, 0)
+        .lineTo(4, -10)
         .closePath();
 
     // 画面中央に配置
@@ -141,23 +232,23 @@ const init = () => {
     arrow.y = stage.canvas.height / 2;
     stage.addChild(arrow);
 
-    const  line = new Shape();
+    const line = new Shape();
     stage.addChild(line);
-    const label = new Text('0px', '24px sans-serif','gray');
+    const label = new Text('0px', '24px sans-serif', 'gray');
     stage.addChild(label);
 
     const handleTickForArrow = () => {
         const dx = stage.mouseX - arrow.x;
         const dy = stage.mouseY - arrow.y;
-        const  radians = Math.atan2(dy, dx);
+        const radians = Math.atan2(dy, dx);
         arrow.rotation = radians * (180 / Math.PI);
 
-        const distance = Math.sqrt((dx **2) + (dy**2));
+        const distance = Math.sqrt((dx ** 2) + (dy ** 2));
         label.text = distance + 'px';
         line.graphics.clear()
             .setStrokeStyle(1).beginStroke('gray')
-            .moveTo(arrow.x,arrow.y)
-            .lineTo(stage.mouseX,stage.mouseY);
+            .moveTo(arrow.x, arrow.y)
+            .lineTo(stage.mouseX, stage.mouseY);
 
         stage.update();
     };
@@ -182,8 +273,6 @@ const init = () => {
     // Ticker.addEventListener('tick', handleTick)
 };
 
-
-
-window.addEventListener('load', init);
+window.addEventListener('load', initDisplay);
 
 

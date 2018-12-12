@@ -12,7 +12,9 @@ body {
 
 canvas {
     position: absolute;
-    left: 150px;
-    top: 150px;
-    background: WhiteSmoke;
+    left: calc(50% - 600px);
+    top: calc(50% - 250px);
+    background: #d0f5d3;
+    width: 1200px;
+    height: 500px;
 }

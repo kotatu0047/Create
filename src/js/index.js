@@ -1,18 +1,13 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import "@babel/polyfill";
 
-const displayWidth = 1200;
-const displayHeight = 500;
-const filedWidth = 800;
-const filedHeight = 300;
-
-const filedCoordinate = {
-    leftBottom: {x: 200, y: 400},  //[200,400],
-    leftTop: {x: 250, y: 100},
-    rightTop: {x: 950, y: 100},
-    rightBottom: {x: 1000, y: 400}
-};
-
+const DisplayWidth = 1200;
+const DisplayHeight = 500;
+const FiledBottomWidth = 800;
+const FiledTopWidth = 700;
+const FiledHeight = 300;
+const FiledLeftBottomX = 200;
+const FiledLeftBottomY = 400;
 
 const initDisplay = () => {
     const stage = new Stage('gameDisplay');
@@ -22,18 +17,8 @@ const initDisplay = () => {
     const filed = new Container();
     stage.addChild(filed);
 
-    const filedOuterFrame = new Shape();
-    filedOuterFrame.graphics
-        .beginStroke('gray')
-        .setStrokeStyle(1)
-        .moveTo(filedCoordinate.leftBottom.x, filedCoordinate.leftBottom.y)
-        .lineTo(filedCoordinate.leftTop.x, filedCoordinate.leftTop.y)
-        .lineTo(filedCoordinate.rightTop.x, filedCoordinate.rightTop.y)
-        .lineTo(filedCoordinate.rightBottom.x, filedCoordinate.rightBottom.y)
-        .lineTo(filedCoordinate.leftBottom.x, filedCoordinate.leftBottom.y)
-        .closePath();
+    const filedOuterFrame = CreateTrapezoid(FiledBottomWidth,FiledTopWidth,FiledHeight,FiledLeftBottomX,FiledLeftBottomY);
     filed.addChild(filedOuterFrame);
-
 
     stage.update();
 
@@ -71,7 +56,7 @@ const initDisplay = () => {
      */
     function CreateFrame(verticalNo, horizontalNo) {
         const filedWidthInside = filedWidth - 20;
-        const filedHeightInside = filedHeight - 20;
+        const filedHeightInside = FiledHeight - 20;
         const aBlockWidth = filedWidthInside / 4;
         const aBlockHeight = filedHeightInside / 4;
 

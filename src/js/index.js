@@ -1,13 +1,18 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import "@babel/polyfill";
 
+//グラフィックの定数
 const DisplayWidth = 1200;
-const DisplayHeight = 500;
-const FiledBottomWidth = 800;
-const FiledTopWidth = 700;
-const FiledHeight = 300;
-const FiledLeftBottomX = 200;
-const FiledLeftBottomY = 400;
+const DisplayHeight = 700;
+const FiledWidth = 800;
+const FiledHeight = 500;
+const FiledLeftX = (DisplayWidth - FiledWidth) / 2;
+const FiledTopY = (DisplayHeight - FiledHeight) / 2;
+const FiledCenterInterval = 100;
+//縦のブロック数
+const VerticalNumber = 4;
+//横のブロック数
+const HorizontalNumber = 5;
 
 const initDisplay = () => {
     const stage = new Stage('gameDisplay');
@@ -17,8 +22,31 @@ const initDisplay = () => {
     const filed = new Container();
     stage.addChild(filed);
 
-    const filedOuterFrame = CreateTrapezoid(FiledBottomWidth,FiledTopWidth,FiledHeight,FiledLeftBottomX,FiledLeftBottomY);
+    //外枠
+    const filedOuterFrame = new Shape();
+    filedOuterFrame.graphics
+        .beginStroke('gray')
+        .setStrokeStyle(1)
+        .drawRect(FiledLeftX, FiledTopY, FiledWidth, FiledHeight);
     filed.addChild(filedOuterFrame);
+
+
+    //1ブロックの大きさ
+    const blockSize = {
+        height: (FiledWidth - FiledCenterInterval) / VerticalNumber,
+        width: FiledWidth / HorizontalNumber
+    };
+    //ブロック毎の座標
+    const blockCoordinate = new Array(VerticalNumber);
+    for (let i = 0; i < blockCoordinate.length; i++) {
+        blockCoordinate[i] = new Array(HorizontalNumber);
+    }
+
+    //フィールドの内側を作成
+    for (let i = 0; i < VerticalNumber; i++) {
+
+
+    }
 
     stage.update();
 
@@ -49,10 +77,45 @@ const initDisplay = () => {
     }
 
     /**
+     * 平行四辺形を作成する関数
+     * @param {Number} width 辺の長さ
+     * @param {Number} height　高さ
+     * @param {Number} leftBottomX　左下のX座標
+     * @param {Number} leftBottomY　左下のY座標
+     * @param {VerticalNumber} shift ずれ
+     * @param {string} orientation　ずれる向き 'right'or'left'
+     * @return {Shape} ParallelRect 平行四辺形の参照
+     */
+    function CreateParallelRect(width, height, leftBottomX, leftBottomY, shift, orientation) {
+        let variable;
+        if (orientation === 'right') {
+            variable = shift;
+        } else if (orientation === 'left') {
+            variable = -shift;
+        } else {
+            return null;
+        }
+
+        const ParallelRect = new Shape();
+        ParallelRect.graphics
+            .beginStroke('gray')
+            .setStrokeStyle(1)
+            .moveTo(leftBottomX, leftBottomY)
+            .lineTo(leftBottomX + variable, leftBottomY - height)
+            .lineTo(leftBottomX + variable + width, leftBottomY - height)
+            .lineTo(leftBottomX + width, leftBottomY)
+            .lineTo(leftBottomX, leftBottomY)
+            .closePath();
+
+        return ParallelRect;
+    }
+
+
+    /**
      * デュエルフィールドの内側の枠を作成
      * @param {Number} verticalNo 縦の番号　上から
      * @param {Number} horizontalNo　横の番号　右から
-     * @returns {{x: number}}
+     * @returns {{x: VerticalNumber}}
      */
     function CreateFrame(verticalNo, horizontalNo) {
         const filedWidthInside = filedWidth - 20;

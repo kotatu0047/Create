@@ -13,8 +13,8 @@ body {
 canvas {
     position: absolute;
     left: calc(50% - 600px);
-    top: calc(50% - 250px);
+    top: calc(50% - 350px);
     background: #d0f5d3;
     width: 1200px;
-    height: 500px;
+    height: 700px;
 }

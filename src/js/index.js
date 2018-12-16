@@ -1,6 +1,9 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import "@babel/polyfill";
 
+
+ Ticker.framerate = Ticker.RAF;
+
 //グラフィックの定数
 const DisplayWidth = 1200;
 const DisplayHeight = 1000;
@@ -42,8 +45,8 @@ const initDisplay = () => {
     //外枠
     const filedOuterFrame = new Shape();
     filedOuterFrame.graphics
-        .beginStroke('gray')
-        .setStrokeStyle(1)
+        .beginStroke('white')
+        .setStrokeStyle(1.5)
         .drawRect(0, 0, FiledWidth, FiledHeight);
     filed.addChild(filedOuterFrame);
 
@@ -65,10 +68,9 @@ const initDisplay = () => {
             blockCoordinate[i][j].y = space + BlockSize.height * i;
             const block = new Shape();
             block.graphics
-                .beginStroke('blue')
-                .setStrokeStyle(1)
+                .beginStroke('white')
+                .setStrokeStyle(0.8)
                 .drawRect(blockCoordinate[i][j].x, blockCoordinate[i][j].y, BlockSize.width, BlockSize.height);
-            block.alpha = 0.3;
             filed.addChild(block);
         }
     }
@@ -76,15 +78,14 @@ const initDisplay = () => {
     const enemyDeck = new Shape();
     enemyDeck.graphics
         .beginStroke('#883b25')
-        .setStrokeStyle(1)
+        .setStrokeStyle(2)
         .drawRect(EnemyDeckX, EnemyDeckY, BlockSize.height, BlockSize.width);
-    enemyDeck.alpha = 0.5;
     stage.addChild(enemyDeck);
 
     const myDeck = new Shape();
     myDeck.graphics
         .beginStroke('#3f6588')
-        .setStrokeStyle(1)
+        .setStrokeStyle(2)
         .drawRect(MyDeckX, MyDeckY, BlockSize.height, BlockSize.width);
     stage.addChild(myDeck);
 
@@ -148,34 +149,6 @@ const initDisplay = () => {
             .closePath();
 
         return ParallelRect;
-    }
-
-
-    /**
-     * デュエルフィールドの内側の枠を作成
-     * @param {Number} verticalNo 縦の番号　上から
-     * @param {Number} horizontalNo　横の番号　右から
-     * @returns {{x: VerticalNumber}}
-     */
-    function CreateFrame(verticalNo, horizontalNo) {
-        const filedWidthInside = filedWidth - 20;
-        const filedHeightInside = FiledHeight - 20;
-        const aBlockWidth = filedWidthInside / 4;
-        const aBlockHeight = filedHeightInside / 4;
-
-        const Coordinate = {
-            leftBottom: {x: 200, y: 400},
-            leftTop: {x: 250, y: 100},
-            rightTop: {x: 950, y: 100},
-            rightBottom: {x: 1000, y: 400}
-        };
-
-        if (verticalNo === 1) {
-
-        }
-
-
-        return {x: 4};
     }
 
 };
@@ -361,6 +334,4 @@ const init = () => {
     // Ticker.addEventListener('tick', handleTick)
 };
 
-window.addEventListener('load', init);
-
-
+window.addEventListener('load', initDisplay);

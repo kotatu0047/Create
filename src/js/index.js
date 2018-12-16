@@ -3,16 +3,31 @@ import "@babel/polyfill";
 
 //グラフィックの定数
 const DisplayWidth = 1200;
-const DisplayHeight = 700;
+const DisplayHeight = 1000;
 const FiledWidth = 800;
-const FiledHeight = 500;
+const FiledHeight = 600;
 const FiledLeftX = (DisplayWidth - FiledWidth) / 2;
 const FiledTopY = (DisplayHeight - FiledHeight) / 2;
 const FiledCenterInterval = 100;
+
 //縦のブロック数
 const VerticalNumber = 4;
 //横のブロック数
 const HorizontalNumber = 5;
+
+//1ブロックの大きさ
+const BlockSize = {
+    height: (FiledHeight - FiledCenterInterval) / VerticalNumber,  //125
+    width: FiledWidth / HorizontalNumber  //160
+};
+
+//敵のデッキ置き場
+const EnemyDeckX = 50;
+const EnemyDeckY = 50;
+//自分のデッキ置き場
+const MyDeckX = DisplayWidth - (BlockSize.width + 25);
+const MyDeckY = DisplayHeight - (BlockSize.height + 100);
+
 
 const initDisplay = () => {
     const stage = new Stage('gameDisplay');
@@ -21,32 +36,57 @@ const initDisplay = () => {
     //デュエルフィールド
     const filed = new Container();
     stage.addChild(filed);
+    filed.x = FiledLeftX;
+    filed.y = FiledTopY;
 
     //外枠
     const filedOuterFrame = new Shape();
     filedOuterFrame.graphics
         .beginStroke('gray')
         .setStrokeStyle(1)
-        .drawRect(FiledLeftX, FiledTopY, FiledWidth, FiledHeight);
+        .drawRect(0, 0, FiledWidth, FiledHeight);
     filed.addChild(filedOuterFrame);
 
 
-    //1ブロックの大きさ
-    const blockSize = {
-        height: (FiledWidth - FiledCenterInterval) / VerticalNumber,
-        width: FiledWidth / HorizontalNumber
-    };
     //ブロック毎の座標
     const blockCoordinate = new Array(VerticalNumber);
     for (let i = 0; i < blockCoordinate.length; i++) {
         blockCoordinate[i] = new Array(HorizontalNumber);
+        for (let j = 0; j < HorizontalNumber; j++) {
+            blockCoordinate[i][j] = {};
+        }
     }
 
     //フィールドの内側を作成
     for (let i = 0; i < VerticalNumber; i++) {
-
-
+        const space = (i >= 2) ? FiledCenterInterval : 0;
+        for (let j = 0; j < HorizontalNumber; j++) {
+            blockCoordinate[i][j].x = BlockSize.width * j;
+            blockCoordinate[i][j].y = space + BlockSize.height * i;
+            const block = new Shape();
+            block.graphics
+                .beginStroke('blue')
+                .setStrokeStyle(1)
+                .drawRect(blockCoordinate[i][j].x, blockCoordinate[i][j].y, BlockSize.width, BlockSize.height);
+            block.alpha = 0.3;
+            filed.addChild(block);
+        }
     }
+
+    const enemyDeck = new Shape();
+    enemyDeck.graphics
+        .beginStroke('#883b25')
+        .setStrokeStyle(1)
+        .drawRect(EnemyDeckX, EnemyDeckY, BlockSize.height, BlockSize.width);
+    enemyDeck.alpha = 0.5;
+    stage.addChild(enemyDeck);
+
+    const myDeck = new Shape();
+    myDeck.graphics
+        .beginStroke('#3f6588')
+        .setStrokeStyle(1)
+        .drawRect(MyDeckX, MyDeckY, BlockSize.height, BlockSize.width);
+    stage.addChild(myDeck);
 
     stage.update();
 
@@ -321,6 +361,6 @@ const init = () => {
     // Ticker.addEventListener('tick', handleTick)
 };
 
-window.addEventListener('load', initDisplay);
+window.addEventListener('load', init);
 
 

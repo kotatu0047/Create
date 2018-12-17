@@ -1,36 +1,10 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import "@babel/polyfill";
+import {Deck} from "./Deck";
+import  {GraphicConfig} from  "./GraphicConfig";
 
 
- Ticker.framerate = Ticker.RAF;
-
-//グラフィックの定数
-const DisplayWidth = 1200;
-const DisplayHeight = 1000;
-const FiledWidth = 800;
-const FiledHeight = 600;
-const FiledLeftX = (DisplayWidth - FiledWidth) / 2;
-const FiledTopY = (DisplayHeight - FiledHeight) / 2;
-const FiledCenterInterval = 100;
-
-//縦のブロック数
-const VerticalNumber = 4;
-//横のブロック数
-const HorizontalNumber = 5;
-
-//1ブロックの大きさ
-const BlockSize = {
-    height: (FiledHeight - FiledCenterInterval) / VerticalNumber,  //125
-    width: FiledWidth / HorizontalNumber  //160
-};
-
-//敵のデッキ置き場
-const EnemyDeckX = 50;
-const EnemyDeckY = 50;
-//自分のデッキ置き場
-const MyDeckX = DisplayWidth - (BlockSize.width + 25);
-const MyDeckY = DisplayHeight - (BlockSize.height + 100);
-
+Ticker.framerate = Ticker.RAF;
 
 const initDisplay = () => {
     const stage = new Stage('gameDisplay');
@@ -39,54 +13,54 @@ const initDisplay = () => {
     //デュエルフィールド
     const filed = new Container();
     stage.addChild(filed);
-    filed.x = FiledLeftX;
-    filed.y = FiledTopY;
+    filed.x = GraphicConfig.FiledLeftX;
+    filed.y = GraphicConfig.FiledTopY;
 
     //外枠
     const filedOuterFrame = new Shape();
     filedOuterFrame.graphics
         .beginStroke('white')
         .setStrokeStyle(1.5)
-        .drawRect(0, 0, FiledWidth, FiledHeight);
+        .drawRect(0, 0, GraphicConfig.FiledWidth, GraphicConfig.FiledHeight);
     filed.addChild(filedOuterFrame);
 
-
     //ブロック毎の座標
-    const blockCoordinate = new Array(VerticalNumber);
+    const blockCoordinate = new Array(GraphicConfig.VerticalNumber);
     for (let i = 0; i < blockCoordinate.length; i++) {
-        blockCoordinate[i] = new Array(HorizontalNumber);
-        for (let j = 0; j < HorizontalNumber; j++) {
+        blockCoordinate[i] = new Array(GraphicConfig.HorizontalNumber);
+        for (let j = 0; j < GraphicConfig.HorizontalNumber; j++) {
             blockCoordinate[i][j] = {};
         }
     }
 
     //フィールドの内側を作成
-    for (let i = 0; i < VerticalNumber; i++) {
-        const space = (i >= 2) ? FiledCenterInterval : 0;
-        for (let j = 0; j < HorizontalNumber; j++) {
-            blockCoordinate[i][j].x = BlockSize.width * j;
-            blockCoordinate[i][j].y = space + BlockSize.height * i;
+    for (let i = 0; i < GraphicConfig.VerticalNumber; i++) {
+        const space = (i >= 2) ? GraphicConfig.FiledCenterInterval : 0;
+        for (let j = 0; j < GraphicConfig.HorizontalNumber; j++) {
+            blockCoordinate[i][j].x = GraphicConfig.BlockSize.width * j;
+            blockCoordinate[i][j].y = space + GraphicConfig.BlockSize.height * i;
             const block = new Shape();
             block.graphics
                 .beginStroke('white')
                 .setStrokeStyle(0.8)
-                .drawRect(blockCoordinate[i][j].x, blockCoordinate[i][j].y, BlockSize.width, BlockSize.height);
+                .drawRect(blockCoordinate[i][j].x, blockCoordinate[i][j].y, GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height);
             filed.addChild(block);
         }
     }
 
-    const enemyDeck = new Shape();
-    enemyDeck.graphics
-        .beginStroke('#883b25')
-        .setStrokeStyle(2)
-        .drawRect(EnemyDeckX, EnemyDeckY, BlockSize.height, BlockSize.width);
+    //敵のデッキ置き場
+    const enemyDeck = new Deck(
+        GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height, 60,
+        'rightBottom', '#883b25');
+    enemyDeck.x = GraphicConfig.EnemyDeckX;
+    enemyDeck.y = GraphicConfig.EnemyDeckY;
     stage.addChild(enemyDeck);
 
-    const myDeck = new Shape();
-    myDeck.graphics
-        .beginStroke('#3f6588')
-        .setStrokeStyle(2)
-        .drawRect(MyDeckX, MyDeckY, BlockSize.height, BlockSize.width);
+    //自分のデッキ置き場
+    const myDeck = new Deck(GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height,
+        40, 'leftBottom', '#3f6588');
+    myDeck.x = GraphicConfig.MyDeckX;
+    myDeck.y = GraphicConfig.MyDeckY;
     stage.addChild(myDeck);
 
     stage.update();

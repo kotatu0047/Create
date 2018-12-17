@@ -10,6 +10,9 @@
     "build": "webpack -p --progress --colors --mode production",
     "fix": "eslint src/js/**.js --fix"
   },
+  "jset": {
+    "verbose": true
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -24,6 +27,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.9.0",

@@ -3,7 +3,6 @@ import "@babel/polyfill";
 import {Deck} from "./Deck";
 import  {GraphicConfig} from  "./GraphicConfig";
 
-
 Ticker.framerate = Ticker.RAF;
 
 const initDisplay = () => {

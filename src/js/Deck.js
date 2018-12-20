@@ -14,7 +14,7 @@ export class Deck extends Container {
      *         'leftBottom'or'rightBottom' 現在使用してない 左上で固定中
      * @param frameColor {string} 枠線の色
      */
-    constructor(width = 0, height = 0,  deckNumber = 0, viewPoint, frameColor = '') {
+    constructor(width = 0, height = 0, deckNumber = 0, viewPoint, frameColor = '') {
         super();
 
         //外枠
@@ -23,6 +23,7 @@ export class Deck extends Container {
             .beginStroke(frameColor)
             .setStrokeStyle(2)
             .drawRect(0, 0, width, height);
+        frame.alpha = 0.3;
         this.frame = frame;
         this.addChild(frame);
 
@@ -31,10 +32,21 @@ export class Deck extends Container {
         for (let i = 0; i < deckNumber; i++) {
             i += 2;
             const card = new Card(false);
-            card.x = i;
+            let ss = width - GraphicConfig.CardWidth + 4;
+            ss /= 2;
+            card.x = ss + i;
             card.y = i;
             this.theDeck[i - 2] = card;
             this.addChild(card);
         }
     }
+
+    /**
+     * @author デッキトップのカードを取得
+     * @returns {Card} デッキトップのカード
+     */
+    GetTopCard() {
+        return this.theDeck[this.theDeck.length - 1];
+    }
+
 }

@@ -1,5 +1,6 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import {GraphicConfig} from "./GraphicConfig";
+import {Tween} from "@createjs/tweenjs";
 
 /*+
  * カードのレンダリング用ラス
@@ -49,5 +50,25 @@ export class Card extends Container {
                 GraphicConfig.CardWidth - (GraphicConfig.CardFrameThickness * 2), GraphicConfig.CardHeight - (GraphicConfig.CardFrameThickness * 2));
         this.back = back;
         this.addChild(back);
+    }
+
+    /**
+     * 指定場所までドローアニメーションを行います
+     * @param x ドロー後の座標
+     * @param y　ドロー後の座標
+     * @param time　アニメーションの時間
+     */
+    DrawAnimation(x, y, time){
+        this.scale = 0;
+        Tween.get(this)
+            .to({x:x,y:y,scale:1},time)
+    }
+
+    /**
+     * 非表示にする　ドローアニメ用
+     */
+    _Hidden () {
+        this.frame.graphics.clear();
+        this.back.graphics.clear();
     }
 }

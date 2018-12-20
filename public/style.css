@@ -19,9 +19,9 @@ body {
 
 canvas {
     position: absolute;
-    left: calc(50% - 600px);
+    left: calc(50% - 750px);
     top: calc(50% - 350px);
-    width: 1200px;
+    width: 1500px;
     height: 700px;
     background: rgba(0,0,0,0.4);
     mix-blend-mode: hard-light;

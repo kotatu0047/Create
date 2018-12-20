@@ -1,7 +1,7 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 // import "@babel/polyfill";
 import {Deck} from "./Deck";
-import  {GraphicConfig} from  "./GraphicConfig";
+import {GraphicConfig} from "./GraphicConfig";
 
 Ticker.framerate = Ticker.RAF;
 
@@ -62,42 +62,21 @@ const initDisplay = () => {
     myDeck.y = GraphicConfig.MyDeckY;
     stage.addChild(myDeck);
 
+    //とりあえず一枚ドロー
+    const topCard = myDeck.GetTopCard();
+    const x1 = Math.abs(topCard.x - GraphicConfig.PlayerHandX);
+    const y1 = Math.abs(topCard.y - GraphicConfig.PlayerHandY);
+    console.log(x1);
+    console.log(y1);
+
+    topCard.DrawAnimation(
+        x1, y1, GraphicConfig.DrawAnimationTime);
+    const handleTick = () => {
+        stage.update();
+    };
+    Ticker.addEventListener('tick', handleTick);
+
     stage.update();
-
-    /**
-     * 平行四辺形を作成する関数
-     * @param {Number} width 辺の長さ
-     * @param {Number} height　高さ
-     * @param {Number} leftBottomX　左下のX座標
-     * @param {Number} leftBottomY　左下のY座標
-     * @param {VerticalNumber} shift ずれ
-     * @param {string} orientation　ずれる向き 'right'or'left'
-     * @return {Shape} ParallelRect 平行四辺形の参照
-     */
-    function CreateParallelRect(width, height, leftBottomX, leftBottomY, shift, orientation) {
-        let variable;
-        if (orientation === 'right') {
-            variable = shift;
-        } else if (orientation === 'left') {
-            variable = -shift;
-        } else {
-            return null;
-        }
-
-        const ParallelRect = new Shape();
-        ParallelRect.graphics
-            .beginStroke('gray')
-            .setStrokeStyle(1)
-            .moveTo(leftBottomX, leftBottomY)
-            .lineTo(leftBottomX + variable, leftBottomY - height)
-            .lineTo(leftBottomX + variable + width, leftBottomY - height)
-            .lineTo(leftBottomX + width, leftBottomY)
-            .lineTo(leftBottomX, leftBottomY)
-            .closePath();
-
-        return ParallelRect;
-    }
-
 };
 
 

@@ -9,12 +9,11 @@ export class Deck extends Container {
     /**
      * @param width {number}　横幅
      * @param height {number} 高さ
-     * @param deckNumber {number} デッキ枚数
      * @param viewPoint {string} どこにプレイヤーの視点があるか
      *         'leftBottom'or'rightBottom' 現在使用してない 左上で固定中
      * @param frameColor {string} 枠線の色
      */
-    constructor(width = 0, height = 0, deckNumber = 0, viewPoint, frameColor = '') {
+    constructor(width = 0, height = 0, viewPoint, frameColor = '') {
         super();
 
         //外枠
@@ -28,17 +27,6 @@ export class Deck extends Container {
         this.addChild(frame);
 
         this.theDeck = [];
-        //デッキの残り枚数だけ山札をレンダリング
-        for (let i = 0; i < deckNumber; i++) {
-            i += 2;
-            const card = new Card(false);
-            let ss = width - GraphicConfig.CardWidth + 4;
-            ss /= 2;
-            card.x = ss + i;
-            card.y = i;
-            this.theDeck[i - 2] = card;
-            this.addChild(card);
-        }
     }
 
     /**
@@ -46,7 +34,11 @@ export class Deck extends Container {
      * @returns {Card} デッキトップのカード
      */
     GetTopCard() {
-        return this.theDeck[this.theDeck.length - 1];
+        if (this.theDeck.length >= 1){
+            return this.theDeck[this.theDeck.length - 1];
+        }
+        else {
+            return null;
+        }
     }
-
 }

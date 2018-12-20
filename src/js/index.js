@@ -2,6 +2,12 @@ import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 // import "@babel/polyfill";
 import {Deck} from "./Deck";
 import {GraphicConfig} from "./GraphicConfig";
+import {GenerateDeck, DrawAnimation} from "./CardUtility";
+import {Hand} from "./Hand";
+import {Rule} from "./RuleConfig";
+import {StrConsts} from "./StrConsts";
+
+console.log(GraphicConfig);
 
 Ticker.framerate = Ticker.RAF;
 
@@ -49,28 +55,35 @@ const initDisplay = () => {
 
     //敵のデッキ置き場
     const enemyDeck = new Deck(
-        GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height, 60,
+        GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height,
         'rightBottom', '#883b25');
     enemyDeck.x = GraphicConfig.EnemyDeckX;
     enemyDeck.y = GraphicConfig.EnemyDeckY;
     stage.addChild(enemyDeck);
+    GenerateDeck(60, enemyDeck, stage);
 
     //自分のデッキ置き場
-    const myDeck = new Deck(GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height,
-        40, 'leftBottom', '#3f6588');
-    myDeck.x = GraphicConfig.MyDeckX;
-    myDeck.y = GraphicConfig.MyDeckY;
-    stage.addChild(myDeck);
+    const playerDeck = new Deck(GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height,
+        'leftBottom', '#3f6588');
+    playerDeck.x = GraphicConfig.PlayerDeckX;
+    playerDeck.y = GraphicConfig.PlayerDeckY;
+    stage.addChild(playerDeck);
+    GenerateDeck(40, playerDeck, stage);
 
-    //とりあえず一枚ドロー
-    const topCard = myDeck.GetTopCard();
-    const x1 = Math.abs(topCard.x - GraphicConfig.PlayerHandX);
-    const y1 = Math.abs(topCard.y - GraphicConfig.PlayerHandY);
-    console.log(x1);
-    console.log(y1);
+    //敵のハンド
+    const enemyHand = new Hand();
+    enemyHand.x = GraphicConfig.EnemyHandX;
+    enemyHand.y = GraphicConfig.EnemyHandY;
+    stage.addChild(enemyHand);
+    DrawAnimation(enemyDeck, enemyHand, Rule.InitialHand, StrConsts.ENEMY);
 
-    topCard.DrawAnimation(
-        x1, y1, GraphicConfig.DrawAnimationTime);
+    //プレイヤーのハンド
+    const playerHand = new Hand();
+    playerHand.x = GraphicConfig.PlayerHandX;
+    playerHand.y = GraphicConfig.PlayerHandY;
+    stage.addChild(playerHand);
+    DrawAnimation(playerDeck, playerHand, Rule.InitialHand, StrConsts.PLAYER);
+
     const handleTick = () => {
         stage.update();
     };

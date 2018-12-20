@@ -1,4 +1,5 @@
 //グラフィックの定数
+
 const DisplayWidth = 1500;
 const DisplayHeight = 1000;
 const FiledWidth = 800;
@@ -9,6 +10,7 @@ const HorizontalNumber = 5;
 const FiledLeftX = (DisplayWidth - FiledWidth) / 2;
 const FiledTopY = (DisplayHeight - FiledHeight) / 2;
 const CardWidth = 80;
+const CardHeight = 120;
 
 //1ブロックの大きさ
 const BlockSize = {
@@ -35,15 +37,15 @@ export const GraphicConfig = {
     EnemyDeckX: FiledLeftX - BlockSize.width - 25,
     EnemyDeckY: FiledTopY,
     //自分のデッキ置き場
-    MyDeckX: FiledWidth + FiledLeftX + 25,
-    MyDeckY: FiledHeight + FiledTopY - BlockSize.height,
-    CardHeight: 120,
+    PlayerDeckX: FiledWidth + FiledLeftX + 25,
+    PlayerDeckY: FiledHeight + FiledTopY - BlockSize.height,
+    CardHeight: CardHeight,
     CardWidth: CardWidth,
     CardFrameThickness: 0.5, //カードの枠線の太さ
     DrawAnimationTime: 200,
     PlayerHandX: FiledLeftX,
-    PlayerHandY: FiledTopY + FiledHeight + ((DisplayHeight - FiledHeight) / 2),
-    EnemyHandX: FiledLeftX + FiledWidth - CardWidth,
-    EnemyHandY: ((DisplayHeight - FiledHeight) / 2),
+    PlayerHandY: FiledTopY + FiledHeight + (FiledTopY / 4),
+    EnemyHandX: FiledLeftX + FiledWidth,
+    EnemyHandY: (FiledTopY - CardHeight) / 2,
     HandInterval: 30
 };

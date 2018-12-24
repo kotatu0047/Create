@@ -1,4 +1,4 @@
-import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
+import {BlurFilter, Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 // import "@babel/polyfill";
 import {Deck} from "./Deck";
 import {GraphicConfig} from "./GraphicConfig";
@@ -7,6 +7,7 @@ import {Hand} from "./Hand";
 import {Rule} from "./RuleConfig";
 import {StrConsts} from "./StrConsts";
 
+//TODO デバッグ用
 console.log(GraphicConfig);
 
 Ticker.framerate = Ticker.RAF;
@@ -30,8 +31,10 @@ const initDisplay = () => {
     filed.addChild(filedOuterFrame);
 
     //ブロック毎の座標
+    const blocks = new Array(GraphicConfig.VerticalNumber);
     const blockCoordinate = new Array(GraphicConfig.VerticalNumber);
     for (let i = 0; i < blockCoordinate.length; i++) {
+        blocks[i] = new Array(GraphicConfig.HorizontalNumber);
         blockCoordinate[i] = new Array(GraphicConfig.HorizontalNumber);
         for (let j = 0; j < GraphicConfig.HorizontalNumber; j++) {
             blockCoordinate[i][j] = {};
@@ -50,6 +53,7 @@ const initDisplay = () => {
                 .setStrokeStyle(0.8)
                 .drawRect(blockCoordinate[i][j].x, blockCoordinate[i][j].y, GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height);
             filed.addChild(block);
+            blocks[i][j] = block;
         }
     }
 
@@ -83,6 +87,20 @@ const initDisplay = () => {
     playerHand.y = GraphicConfig.PlayerHandY;
     stage.addChild(playerHand);
     DrawAnimation(playerDeck, playerHand, Rule.InitialHand, StrConsts.PLAYER);
+
+    const selectedCard = () => {
+        const filter = new BlurFilter(5, 5, 3);
+        for (let j = 0; j < GraphicConfig.HorizontalNumber; j++) {
+            blocks[2][j].filters = [filter];
+            blocks[2][j].cache(blockCoordinate[2][j].x, blockCoordinate[2][j].y, GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height);
+        }
+        stage.update();
+    };
+    //blocks[2][0].x, blocks[2][0].y, blocks[2][0].width, blocks[2][0].height
+
+    for (const playerHandElement of playerHand.hands) {
+        playerHandElement.addEventListener('mousedown', selectedCard);
+    }
 
     const handleTick = () => {
         stage.update();

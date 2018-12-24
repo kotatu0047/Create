@@ -1,6 +1,5 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import {GraphicConfig} from "./GraphicConfig";
-import {Tween} from "@createjs/tweenjs";
 
 /*+
  * カードのレンダリング用ラス

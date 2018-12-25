@@ -6,6 +6,7 @@ import {GenerateDeck, DrawAnimation} from "./CardUtility";
 import {Hand} from "./Hand";
 import {Rule} from "./RuleConfig";
 import {StrConsts} from "./StrConsts";
+import {EffectManager} from "./FiledUtility";
 
 //TODO デバッグ用
 console.log(GraphicConfig);
@@ -88,18 +89,22 @@ const initDisplay = () => {
     stage.addChild(playerHand);
     DrawAnimation(playerDeck, playerHand, Rule.InitialHand, StrConsts.PLAYER);
 
+    //TODO 特定のブロックにエフェクトを入れる関数を作成する
+    const effectManager = new EffectManager(filed);
     const selectedCard = () => {
-        const filter = new BlurFilter(5, 5, 3);
-        for (let j = 0; j < GraphicConfig.HorizontalNumber; j++) {
-            blocks[2][j].filters = [filter];
-            blocks[2][j].cache(blockCoordinate[2][j].x, blockCoordinate[2][j].y, GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height);
-        }
+        const addEffectFunc = effectManager.CreateAddEffectFunction(blockCoordinate[2]);
+        addEffectFunc();
         stage.update();
     };
-    //blocks[2][0].x, blocks[2][0].y, blocks[2][0].width, blocks[2][0].height
+    const endSelectedCard = () => {
+        const RemoveEffectFunc = effectManager.CreateRemoveEffectFunction();
+        RemoveEffectFunc();
+        stage.update();
+    };
 
     for (const playerHandElement of playerHand.hands) {
         playerHandElement.addEventListener('mousedown', selectedCard);
+        playerHandElement.addEventListener('pressup',endSelectedCard)
     }
 
     const handleTick = () => {

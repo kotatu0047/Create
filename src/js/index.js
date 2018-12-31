@@ -65,7 +65,7 @@ const initDisplay = () => {
     enemyDeck.x = GraphicConfig.EnemyDeckX;
     enemyDeck.y = GraphicConfig.EnemyDeckY;
     stage.addChild(enemyDeck);
-    GenerateDeck(6, enemyDeck, stage);
+    GenerateDeck(60, enemyDeck, stage);
 
     //自分のデッキ置き場
     const playerDeck = new Deck(GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height,
@@ -104,7 +104,7 @@ const initDisplay = () => {
 
     for (const playerHandElement of playerHand.hands) {
         playerHandElement.addEventListener('mousedown', selectedCard);
-        playerHandElement.addEventListener('pressup',endSelectedCard)
+        playerHandElement.addEventListener('pressup', endSelectedCard)
     }
 
     //デバッグボタン
@@ -115,7 +115,9 @@ const initDisplay = () => {
         .beginFill('white')
         .drawRoundRect(0, 0, 200, 100, 4);
     stage.addChild(debugButton);
-    debugButton.addEventListener('click', () => {enemyDeck.ShuffleAnimation()});
+    debugButton.addEventListener('click', () => {
+        enemyDeck.ShuffleAnimation()
+    });
 
 
     const handleTick = () => {

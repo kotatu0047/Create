@@ -19,15 +19,16 @@ export function GenerateDeck(deckNumber = 0, deck = null, stage = null) {
     deck.theDeck = [];
     //デッキの残り枚数だけ山札をレンダリング
     for (let i = 0; i < deckNumber; i++) {
-        const target = i + 2;
         const card = new Card(false);
         let gap = GraphicConfig.CardWidth + 4;
         gap /= 2;
-        card.x = deck.x + gap + target;
-        card.y = deck.y + target;
+        card.x = deck.x + gap + 2; //+ target;
+        card.y = deck.y + 2; //+ target;
         deck.theDeck.push(card);
         stage.addChild(card);
     }
+
+    deck.UpdateDisplayDeckNumber();
 }
 
 /**
@@ -57,4 +58,6 @@ export function DrawAnimation(deck, hand, drawNumber, iff) {
             .to({x: x, y: hand.y, scale: 1}, GraphicConfig.DrawAnimationTime * (i + 1));
         hand.hands.push(deck.theDeck.pop());
     }
+
+    deck.UpdateDisplayDeckNumber();
 }

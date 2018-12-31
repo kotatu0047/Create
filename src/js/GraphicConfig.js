@@ -43,6 +43,7 @@ export const GraphicConfig = {
     CardWidth: CardWidth,
     CardFrameThickness: 0.5, //カードの枠線の太さ
     DrawAnimationTime: 200,
+    ShuffleAnimationTime: 50,
     PlayerHandX: FiledLeftX,
     PlayerHandY: FiledTopY + FiledHeight + (FiledTopY / 4),
     EnemyHandX: FiledLeftX + FiledWidth,

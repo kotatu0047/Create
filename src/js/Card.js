@@ -1,5 +1,6 @@
 import {Container, Shape, Stage, Text, Ticker} from "@createjs/easeljs";
 import {GraphicConfig} from "./GraphicConfig";
+import {StrColors} from "./StrConsts";
 
 /*+
  * カードのレンダリング用ラス
@@ -8,15 +9,17 @@ export class Card extends Container {
 
     /**
      * @param isOpen {boolean} 表側表示か
+     * @param inDeck {boolean} デッキの中にいるか
      */
-    constructor(isOpen = false) {
+    constructor(isOpen = false, inDeck = false) {
         super();
         this.isOpen = isOpen;
+        this.inDeck = inDeck;
 
         //外枠
         const frame = new Shape();
         frame.graphics
-            .beginStroke('white')
+            .beginStroke(StrColors.WHITE)
             .setStrokeStyle(GraphicConfig.CardFrameThickness)
             .drawRect(0, 0, GraphicConfig.CardWidth, GraphicConfig.CardHeight);
         this.frame = frame;

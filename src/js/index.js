@@ -5,7 +5,7 @@ import {GraphicConfig} from "./GraphicConfig";
 import {GenerateDeck, DrawAnimation} from "./CardUtility";
 import {Hand} from "./Hand";
 import {Rule} from "./RuleConfig";
-import {StrConsts} from "./StrConsts";
+import {StrColors, StrConsts} from "./StrConsts";
 import {EffectManager} from "./FiledUtility";
 
 //TODO デバッグ用
@@ -26,7 +26,7 @@ const initDisplay = () => {
     //外枠
     const filedOuterFrame = new Shape();
     filedOuterFrame.graphics
-        .beginStroke('white')
+        .beginStroke(StrColors.WHITE)
         .setStrokeStyle(1.5)
         .drawRect(0, 0, GraphicConfig.FiledWidth, GraphicConfig.FiledHeight);
     filed.addChild(filedOuterFrame);
@@ -50,7 +50,7 @@ const initDisplay = () => {
             blockCoordinate[i][j].y = space + GraphicConfig.BlockSize.height * i;
             const block = new Shape();
             block.graphics
-                .beginStroke('white')
+                .beginStroke(StrColors.WHITE)
                 .setStrokeStyle(0.8)
                 .drawRect(blockCoordinate[i][j].x, blockCoordinate[i][j].y, GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height);
             filed.addChild(block);
@@ -65,7 +65,7 @@ const initDisplay = () => {
     enemyDeck.x = GraphicConfig.EnemyDeckX;
     enemyDeck.y = GraphicConfig.EnemyDeckY;
     stage.addChild(enemyDeck);
-    GenerateDeck(60, enemyDeck, stage);
+    GenerateDeck(6, enemyDeck, stage);
 
     //自分のデッキ置き場
     const playerDeck = new Deck(GraphicConfig.BlockSize.width, GraphicConfig.BlockSize.height,
@@ -106,6 +106,17 @@ const initDisplay = () => {
         playerHandElement.addEventListener('mousedown', selectedCard);
         playerHandElement.addEventListener('pressup',endSelectedCard)
     }
+
+    //デバッグボタン
+    const debugButton = new Shape();
+    debugButton.graphics
+        .setStrokeStyle(1)
+        .beginStroke('black')
+        .beginFill('white')
+        .drawRoundRect(0, 0, 200, 100, 4);
+    stage.addChild(debugButton);
+    debugButton.addEventListener('click', () => {enemyDeck.ShuffleAnimation()});
+
 
     const handleTick = () => {
         stage.update();
@@ -189,7 +200,6 @@ const init = () => {
         .drawRoundRect(0, 0, btnWidth, btnHeight, 4);
     buttonBackGroundOnMouseOver.visible = false;
     button.addChild(buttonBackGroundOnMouseOver);
-
 
     //文字
     const buttonText = new Text('Button', '24px sans-serif', keyColor);

@@ -10,8 +10,12 @@ body {
     position: absolute;
     margin: 2.5% 2.5% 5% 5%;
     padding: 0;
-    width: 90%;
-    height: 90%;
+    /*width: 90%;*/
+    /*height: 90%;  */
+    left: calc(50% - 750px);
+    top: calc(50% - 350px);
+    width: 1500px;
+    height: 700px;
     background: linear-gradient(to bottom, #25e5d4, #8c60ff, #d183b8, #e5c787);
     background-size: 500% 500%;
     animation: backGroundAnimation 20s ease infinite alternate;

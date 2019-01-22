@@ -68,11 +68,11 @@ export class Deck extends Container {
         }
 
         this.isShuffling = true;
-        let cards = [1, 2, 3, 4];
-        cards = cards.map(targetIndex => {
+
+        //デッキの下から四枚のカードを取得
+        let cards = [1, 2, 3, 4].map(targetIndex => {
             return (this.theDeck.length >= targetIndex) ? this.theDeck[targetIndex - 1] : 0;
-        });
-        cards = cards.filter(el => el !== 0);
+        }).filter(el => el !== 0);
 
         cards.forEach((card, index) => {
             const time = (index + 1) * GraphicConfig.ShuffleAnimationTime;
